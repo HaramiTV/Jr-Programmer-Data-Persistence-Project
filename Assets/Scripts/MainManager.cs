@@ -14,9 +14,11 @@ public class MainManager : MonoBehaviour
     public GameObject GameOverText;
     
     private bool m_Started = false;
-    private int m_Points;
+    public int m_Points;
     
     private bool m_GameOver = false;
+
+    private GameManager gameManager;
 
     
     // Start is called before the first frame update
@@ -36,6 +38,8 @@ public class MainManager : MonoBehaviour
                 brick.onDestroyed.AddListener(AddPoint);
             }
         }
+
+
     }
 
     private void Update()
@@ -57,6 +61,7 @@ public class MainManager : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
+
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             }
         }
@@ -70,7 +75,17 @@ public class MainManager : MonoBehaviour
 
     public void GameOver()
     {
+        SetHighScoreText();
         m_GameOver = true;
         GameOverText.SetActive(true);
+    }
+
+    private void SetHighScoreText()
+    {
+        gameManager = FindObjectOfType<GameManager>();
+
+        gameManager.SetHighScore(m_Points);
+        gameManager.SaveHighScore();
+        gameManager.LoadHighScore();
     }
 }
